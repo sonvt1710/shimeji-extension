@@ -2,7 +2,7 @@ import {browser} from "./browser"
 import spritesheets from "./spritesheet_data.json"
 
 for(let key in spritesheets){
-    spritesheets[key].img = browser.extension.getURL(`/media/${spritesheets[key].img}`)
+    spritesheets[key].img = browser.extension.getURL(`/media/spritesheets/${spritesheets[key].img}`)
 
     spritesheets[key].actions.walk = spritesheets[key].actions.Walk
     spritesheets[key].actions.idle = spritesheets[key].actions.Sit

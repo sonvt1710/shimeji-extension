@@ -10,6 +10,9 @@ let popupConfig = {
         test: /\.(js)$/,
         exclude: /node_modules/,
         use: ['babel-loader']
+      },{
+        test: /\.css$/i,
+        use: ["to-string-loader", "css-loader"],
       }
     ]
   },
