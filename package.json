@@ -1,7 +1,7 @@
 {
   "name": "shimeji-extension",
   "version": "1.0.0",
-  "description": "",
+  "description": " ",
   "main": "index.js",
   "dependencies": {
     "@babel/preset-react": "^7.12.5",
