@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa&display=swap');
+
+:root{
+    --blue:#238bdc;
+    --light-blue:#cbebf6;
+    --red:#ea5469;
+    --white:#fef7ee;
+    --black:#444;
+}
+
+html,body,#root{
+    height:600px;
+    width:550px;
+    margin: 0;
+}
+
+body{
+    background: linear-gradient(45deg,#c0f0dd,#c6daea); 
+}
+
+*{
+    font-family: 'Comfortaa', cursive;
+    font-size:14px;
+}
+
+h1,h2,h3{
+    color:var(--black);
+    font-weight:600;
+    margin:20px 0;
+    text-align:center;
+    text-transform: capitalize;
+}
+
+h1{
+    font-size:20px;
+}
+
+p,span,b,a{
+    color:var(--black);
+}
+
+button{
+    height:45px;
+    background:#fef7ee;
+    border-radius:10px;
+    min-width:80px;
+    border:2px solid #238bdc;
+    color:#238bdc;
+    cursor:pointer;
+    transition: .25s ease;
+}
+
+button:hover{
+    color:white;
+    background:#238bdc;
+    border:2px solid white;
+}
+
+button.red{
+    border:2px solid #ea5469;
+    color:#ea5469;
+}
+
+button.red:hover{
+    background:#ea5469;
+    color:white;
+    border:2px solid white;
+}
+
+input{
+    background:#fef7ee;
+    border:2px solid #238bdc;
+    color:#238bdc;
+}
+
+input::placeholder{
+    color:#238bdc99;
+}
+
+label{
+    height:45px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    background:#fef7ee;
+    border-radius:10px;
+    color:#238bdc;
+    border:2px solid #333;
+}
+
+.\@grow:hover{
+    transition: .25s ease;
+    cursor:pointer;
+    transform:scale(1.1);
+}
+
+.animate {
+    animation : shimmer 5s infinite alternate;
+    background: linear-gradient(45deg, #eff1f3 10%, #e2e2e2 25%, #eff1f3 36%);
+    background-size: 1000px 100%;
+}
+
+@keyframes shimmer {
+    0% {
+      background-position: -1000px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+}
+
+::-webkit-scrollbar{
+    height:10px;
+    width:10px;
+}
+
+::-webkit-scrollbar-track{
+    background:rgba(0,0,0,0);
+}
+
+::-webkit-scrollbar-thumb{
+    border-radius: 10px;
+    background:#238bdc;
+}
