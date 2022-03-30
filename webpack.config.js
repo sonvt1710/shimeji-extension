@@ -1,4 +1,3 @@
-// npx webpack
 let popupConfig = {
   entry: './src/popup/index.js',
   output: {
@@ -10,7 +9,7 @@ let popupConfig = {
         test: /\.(js)$/,
         exclude: /node_modules/,
         use: ['babel-loader']
-      },{
+      }, {
         test: /\.css$/i,
         use: ["to-string-loader", "css-loader"],
       }
@@ -26,6 +25,21 @@ let contentScriptConfig = {
   output: {
     filename: 'index.js'
   },
+  module: {
+    rules: [
+      {
+        test: /\.(js)$/,
+        exclude: /node_modules/,
+        use: ['babel-loader']
+      }, {
+        test: /\.css$/i,
+        use: ["to-string-loader", "css-loader"],
+      }
+    ]
+  },
+  resolve: {
+    extensions: ['*', '.js']
+  }
 }
 
-module.exports = [popupConfig,contentScriptConfig]
+module.exports = [popupConfig, contentScriptConfig]

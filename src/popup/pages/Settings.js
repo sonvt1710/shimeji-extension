@@ -1,8 +1,9 @@
-import React, { useState,useEffect } from 'react'
-import { Nav } from "../components"
-import {fireMessage,browser} from "../../browser"
-import styled from "styled-components"
 import BootstrapSwitchButton from 'bootstrap-switch-button-react'
+import { fireMessage, browser } from "../../browser"
+import React, { useState, useEffect } from 'react'
+import mixpanel from "mixpanel-browser"
+import styled from "styled-components"
+import { Nav } from "../components"
 
 
 const SettingsStyle = styled.main`
@@ -12,7 +13,7 @@ const SettingsStyle = styled.main`
         align-items:center;
         justify-content:center;
       
-        &>div{
+        & > div{
             width:50vw;
             height:40px;
             margin:20px 0;
@@ -27,34 +28,36 @@ const SettingsStyle = styled.main`
 export function Settings() {
     let [settings, setSettings] = useState({})
 
-    useEffect(()=>{
+    useEffect(() => {
         let savedSettings = localStorage.getItem("settings")
 
-        if(savedSettings)
+        if (savedSettings)
             savedSettings = JSON.parse(savedSettings)
-        else{
+        else {
             let defaultSettings = {
-                multiply:false,
-                grow:false,
-                autoSpawn:true
+                multiply: false,
+                grow: false,
+                autoSpawn: true
             }
-            localStorage.setItem("settings",JSON.stringify(defaultSettings))
-            browser.storage.sync.set({"settings":defaultSettings})
+            localStorage.setItem("settings", JSON.stringify(defaultSettings))
+            browser.storage.sync.set({ "settings": defaultSettings })
             savedSettings = defaultSettings
         }
 
         setSettings(savedSettings)
-        browser.storage.sync.set({"settings":savedSettings})
-    },[])
+        browser.storage.sync.set({ "settings": savedSettings })
 
-    function updateSettings(name,value){
+        mixpanel.track("Settings");
+    }, [])
+
+    function updateSettings(name, value) {
         let newSettings = {
             ...settings,
-            [name]:value
+            [name]: value
         }
-        localStorage.setItem("settings",JSON.stringify(newSettings))
+        localStorage.setItem("settings", JSON.stringify(newSettings))
         setSettings(newSettings)
-        browser.storage.sync.set({"settings":newSettings})
+        browser.storage.sync.set({ "settings": newSettings })
 
         fireMessage("refresh settings")
     }
@@ -74,7 +77,7 @@ export function Settings() {
                         offlabel='Off'
                         onstyle="primary"
                         onChange={(checked) => {
-                            updateSettings("multiply",checked)
+                            updateSettings("multiply", checked)
                         }}
                     />
                 </div>
@@ -87,7 +90,7 @@ export function Settings() {
                         offlabel='Off'
                         onstyle="primary"
                         onChange={(checked) => {
-                            updateSettings("grow",checked)
+                            updateSettings("grow", checked)
                         }}
                     />
                 </div>
@@ -100,7 +103,7 @@ export function Settings() {
                         offlabel='Off'
                         onstyle="primary"
                         onChange={(checked) => {
-                            updateSettings("autoSpawn",checked)
+                            updateSettings("autoSpawn", checked)
                         }}
                     />
                 </div>

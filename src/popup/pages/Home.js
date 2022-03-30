@@ -1,11 +1,12 @@
-import React,{useState,useEffect} from "react"
-import {fireMessage,browser} from "../../browser"
+import React, { useState, useEffect } from "react"
+import { fireMessage, browser } from "../../browser"
 import spritesheet_data from "../../spritesheets"
+import mixpanel from "mixpanel-browser"
 import styled from "styled-components"
-import {Nav} from "../components"
+import { Nav } from "../components"
 
 
-let RootStyle = styled.main`
+let HomeStyle = styled.main`
     height:100%;
     width:100%;
     display:flex;
@@ -14,22 +15,22 @@ let RootStyle = styled.main`
 `
 
 
-export function Root() {
-    let [activeSprite,setActiveSprite] = useState(null)
-    let [spritesheets,setSpritesheets] = useState({})
+export function Home() {
+    let [activeSprite, setActiveSprite] = useState(null)
+    let [spritesheets, setSpritesheets] = useState({})
 
-    useEffect(()=>{
-        spritesheet_data.then(sheet=>{
+    useEffect(() => {
+        spritesheet_data.then(sheet => {
             setSpritesheets(sheet)
         })
-    },[])
+    }, [])
 
     return (
-        <RootStyle>
+        <HomeStyle>
             <Nav />
-            <Header {...{activeSprite,setActiveSprite,spritesheets}}/>
-            <Sprites {...{setActiveSprite,spritesheets}}/>
-        </RootStyle>
+            <Header {...{ activeSprite, setActiveSprite, spritesheets }} />
+            <Sprites {...{ setActiveSprite, spritesheets }} />
+        </HomeStyle>
     )
 }
 
@@ -104,94 +105,95 @@ let HeaderStyle = styled.header`
 `
 
 
-function Header(props){
-    let [canvas,setCanvas] = useState(null)
-    let [showWarning,setShowWarning] = useState(false)
-    let [favs,setFavs] = useState([])
+function Header(props) {
+    let [canvas, setCanvas] = useState(null)
+    let [showWarning, setShowWarning] = useState(false)
+    let [favs, setFavs] = useState([])
 
-    useEffect(()=>{
-        fireMessage("ping","are you there",(msg)=>{
-            if(!msg)
+    useEffect(() => {
+        fireMessage("ping", "are you there", (msg) => {
+            if (!msg)
                 setShowWarning(true)
         })
-    },[])
-    
-    useEffect(()=>{
-        if(props.activeSprite !== null){       
+    }, [])
+
+    useEffect(() => {
+        if (props.activeSprite !== null) {
             let ctx = canvas.getContext("2d")
             let sprite = props.spritesheets[props.activeSprite]
             let img = sprite.img
-            let {x,y,height,width} = sprite.atlas[sprite.actions.walk[0]]
+            let { x, y, height, width } = sprite.atlas[sprite.actions.walk[0]]
 
             canvas.height = height
             canvas.width = width
-            ctx.clearRect(0,0,canvas.width,canvas.height)
-            ctx.drawImage(img,x,y,width,height,0,0,width,height)
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+            ctx.drawImage(img, x, y, width, height, 0, 0, width, height)
         }
-    },[props.activeSprite])
+    }, [props.activeSprite])
 
-    useEffect(()=>{
-        if(!Object.keys(props.spritesheets).length) return
-        
+    useEffect(() => {
+        if (!Object.keys(props.spritesheets).length) return
+
         let localFavs = []
 
-        if(localStorage.getItem("favs")){
+        if (localStorage.getItem("favs")) {
             localFavs = JSON.parse(localStorage.getItem("favs"))
             setFavs(localFavs)
-        }else{
+        } else {
             let defaultFavs = ["my-hero-academia-katsuki-bakugo-kacchan-by-superevey"]
             localFavs = defaultFavs
-            localStorage.setItem("favs",JSON.stringify(defaultFavs))
+            localStorage.setItem("favs", JSON.stringify(defaultFavs))
             setFavs(defaultFavs)
         }
 
-        browser.storage.sync.set({"favs":localFavs})
-    },[props.spritesheets])
+        browser.storage.sync.set({ "favs": localFavs })
+    }, [props.spritesheets])
 
-    function handleSpawn(){
-        fireMessage("spawn",props.activeSprite)
+    function handleSpawn() {
+        mixpanel.track(`Home: Spawn: ${props.activeSprite}`)
+        fireMessage("spawn", props.activeSprite)
     }
 
-    function handleClear(){
+    function handleClear() {
         fireMessage("clear")
     }
 
-    function handleFavorite(){
-        if(props.activeSprite === null) return
+    function handleFavorite() {
+        if (props.activeSprite === null) return
 
         let localFavs = localStorage.getItem("favs")
         let favs = localFavs ? JSON.parse(localFavs) : []
         favs.unshift(props.activeSprite)
-        favs = favs.slice(0,12)
+        favs = favs.slice(0, 12)
 
-        localStorage.setItem("favs",JSON.stringify(favs))
-        browser.storage.sync.set({"favs":favs})
+        localStorage.setItem("favs", JSON.stringify(favs))
+        browser.storage.sync.set({ "favs": favs })
         setFavs(favs)
     }
 
-    function handleClearFavorites(){
-        localStorage.setItem("favs","[]")
-        browser.storage.sync.set({"favs":[]})
+    function handleClearFavorites() {
+        localStorage.setItem("favs", "[]")
+        browser.storage.sync.set({ "favs": [] })
         setFavs([])
     }
-    
-    let favBoxes = favs.map((name)=>{
-        let {x,y,height,width} = props.spritesheets[name].atlas[props.spritesheets[name].actions.walk[0]]
+
+    let favBoxes = favs.map((name) => {
+        let { x, y, height, width } = props.spritesheets[name].atlas[props.spritesheets[name].actions.walk[0]]
         return (
             <div className="fav @grow">
-            <canvas 
-            onClick={()=>props.setActiveSprite(name)}
-            ref={(canvas)=>{
-                if(!canvas) return 
-                let ctx = canvas.getContext("2d")
-                let img = props.spritesheets[name].img 
-                ctx.clearRect(0,0,canvas.width,canvas.height)
-                ctx.drawImage(img,x,y,width,height,0,0,width,height)
-            }} height={height} width={width}></canvas>
+                <canvas
+                    onClick={() => props.setActiveSprite(name)}
+                    ref={(canvas) => {
+                        if (!canvas) return
+                        let ctx = canvas.getContext("2d")
+                        let img = props.spritesheets[name].img
+                        ctx.clearRect(0, 0, canvas.width, canvas.height)
+                        ctx.drawImage(img, x, y, width, height, 0, 0, width, height)
+                    }} height={height} width={width}></canvas>
             </div>
         )
-    }) 
-    
+    })
+
     return (
         <HeaderStyle>
             <section className="settings">
@@ -204,7 +206,7 @@ function Header(props){
 
             <section className="sprite">
                 <h1>{props.activeSprite ? props.activeSprite.split("-").join(" ") : " "}</h1>
-                <canvas ref={e=>{setCanvas(e)}}></canvas>
+                <canvas ref={e => { setCanvas(e) }}></canvas>
                 <button onClick={handleSpawn}>Spawn</button>
             </section>
 
@@ -214,7 +216,7 @@ function Header(props){
                     {favBoxes}
                 </div>
             </section>
-            
+
             <aside class={`bg-warning p-3 fixed-top w-100 ${showWarning ? "d-flex" : "d-none"}`}>
                 <b class="text-white">Sugoi Shimeji is not allowed to run on the current page, please try a different website.</b>
             </aside>
@@ -266,36 +268,36 @@ let SpritesStyle = styled.div`
     }
 `
 
-function Sprites(props){
-    let [sprites,setSprites] = useState([])
+function Sprites(props) {
+    let [sprites, setSprites] = useState([])
 
-    useEffect(()=>{
+    useEffect(() => {
         let initialSprites = []
 
         let index = 0
-        for(let name in props.spritesheets){
-            initialSprites.push([name,index,true])
+        for (let name in props.spritesheets) {
+            initialSprites.push([name, index, true])
             index++
         }
 
         setSprites(initialSprites)
-    },[props.spritesheets])
+    }, [props.spritesheets])
 
-    function handleSearch(e){
+    function handleSearch(e) {
         let newSpriteArray = []
         let usersSearch = e.target.value.trim().toLowerCase()
 
-        sprites.forEach(([name,index,flag])=>{
+        sprites.forEach(([name, index, flag]) => {
             let valid = true
-            usersSearch.split(" ").forEach(keyword=>{
-                if(!name.trim().toLowerCase().includes(keyword))
+            usersSearch.split(" ").forEach(keyword => {
+                if (!name.trim().toLowerCase().includes(keyword))
                     valid = false
             })
 
-            if(usersSearch === "")
+            if (usersSearch === "")
                 valid = true
 
-            newSpriteArray.push([name,index,valid])
+            newSpriteArray.push([name, index, valid])
         })
 
         setSprites(newSpriteArray)
@@ -303,15 +305,15 @@ function Sprites(props){
 
     return (
         <SpritesStyle className="Sprites">
-            <input type="text" 
-            placeholder={`Search for Character (${Object.keys(props.spritesheets).length} Total)`} 
-            onChange={handleSearch}/>
+            <input type="text"
+                placeholder={`Search for Character (${Object.keys(props.spritesheets).length} Total)`}
+                onChange={handleSearch} />
 
             <div className="spriteBox">
-                {sprites.filter(arr=>arr[2]).map(([name,index,flag])=> {
+                {sprites.filter(arr => arr[2]).map(([name, index, flag]) => {
                     return (
-                        <div className="sprite @grow" onClick={()=>props.setActiveSprite(name)}>
-                            <img src={`/media/sprites/sprite${index}.webp`}/>
+                        <div className="sprite @grow" onClick={() => props.setActiveSprite(name)}>
+                            <img src={`/media/sprites/sprite${index}.webp`} />
                         </div>
                     )
                 })}

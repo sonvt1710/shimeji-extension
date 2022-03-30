@@ -1,8 +1,8 @@
-import {Root} from "./Root"
-import {Settings} from "./Settings"
+import { Home } from "./Home"
+import { Settings } from "./Settings"
 
 
 export {
-    Root,
+    Home,
     Settings
 }

@@ -1,7 +1,7 @@
 {
-    "manifest_version": 2,
+    "manifest_version": 3,
     "name": "Sugoi Shimeji",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "description": "Small animated characters that you can interact with.",
     "icons": {
       "32": "icon_32.png",
@@ -16,12 +16,15 @@
     "permissions": [
       "storage"
     ],
-    "browser_action": {
+    "action": {
       "default_icon": "icon_512.png",
       "default_title": "Sugoi Shimeji",
       "default_popup": "./popup/index.html"
     },
     "web_accessible_resources":[
-      "media/*"
+     {
+       "resources": [ "/media/*"],
+       "matches": ["<all_urls>"]
+     }
     ]
 }
