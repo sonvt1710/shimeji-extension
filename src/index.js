@@ -418,13 +418,13 @@ let shimeji = (function () {
 })()
 
 
-browser.storage.sync.get(["settings", "favs", "clickedHelperButton"], function (items) {
+browser.storage.sync.get(["settings", "favs"], function (items) {
     if (items["settings"])
         shimeji.settings = items.settings
     if (items["favs"])
         shimeji.favs = items.favs
-    if (!items["clickedHelperButton"])
-        showButton()
+    // if (!items["clickedHelperButton"])
+    //     showButton()
 
     shimeji.setup()
 });
@@ -452,75 +452,75 @@ browser.runtime.onMessage.addListener((req, sender, reply) => {
 })
 
 
-function showButton() {
+// function showButton() {
 
-    window.addEventListener('load', (event) => {
+//     window.addEventListener('load', (event) => {
 
-        function openImg() {
-            let anchor = document.createElement("a")
-            anchor.href = "https://miro.medium.com/max/1000/0*7ftPt1OUoJMOqjXN"
-            anchor.target = "_blank"
-            anchor.click()
-            anchor.remove()
+//         function openImg() {
+//             let anchor = document.createElement("a")
+//             anchor.href = "https://miro.medium.com/max/1000/0*7ftPt1OUoJMOqjXN"
+//             anchor.target = "_blank"
+//             anchor.click()
+//             anchor.remove()
 
-            browser.storage.sync.set({ clickedHelperButton: true })
-        }
+//             browser.storage.sync.set({ clickedHelperButton: true })
+//         }
 
-        let style =  `
-        <style>
-            .sugoi-shimeji-button{
-                position:fixed;
-                top:50px;
-                right:50px;
-                height:75px;
-                width:75px;
-                background:#fff;
-                border-radius:50%;
-                box-shadow: 2px 2px 7px 0px #a2a2a2;
-                z-index:10000;
-                animation:pulse 1s linear 0s infinite alternate;
-                display:flex;
-                align-items:center;
-                justify-content:center;
-                cursor:pointer;
-            }
+//         let style =  `
+//         <style>
+//             .sugoi-shimeji-button{
+//                 position:fixed;
+//                 top:50px;
+//                 right:50px;
+//                 height:75px;
+//                 width:75px;
+//                 background:#fff;
+//                 border-radius:50%;
+//                 box-shadow: 2px 2px 7px 0px #a2a2a2;
+//                 z-index:10000;
+//                 animation:pulse 1s linear 0s infinite alternate;
+//                 display:flex;
+//                 align-items:center;
+//                 justify-content:center;
+//                 cursor:pointer;
+//             }
 
-            .sugoi-shimeji-button img{
-                height:70%;
-                width:auto;
-            }
+//             .sugoi-shimeji-button img{
+//                 height:70%;
+//                 width:auto;
+//             }
 
-            @keyframes pulse{
-                from{
-                    transform:scale(1);
-                }
-                33%{
-                    transform:scale(1.3);
-                }
-                66%{
-                    tranform:scale(.8);
-                }
-                100%{
-                    transform:scale(1);
-                }
-            }
-        </style>
-        `
+//             @keyframes pulse{
+//                 from{
+//                     transform:scale(1);
+//                 }
+//                 33%{
+//                     transform:scale(1.3);
+//                 }
+//                 66%{
+//                     tranform:scale(.8);
+//                 }
+//                 100%{
+//                     transform:scale(1);
+//                 }
+//             }
+//         </style>
+//         `
 
-        style = document.createRange().createContextualFragment(style)
-        document.head.appendChild(style)
+//         style = document.createRange().createContextualFragment(style)
+//         document.head.appendChild(style)
 
-        let button = `
-        <div class="sugoi-shimeji-button">
-            <img src="https://lh3.googleusercontent.com/UHrAPUPkpAXoP69X0hfplO6UeFLWeJcj7-F3HD3LhAlZQ0O4T8cZvtesGUoscxlCT0uB1Hefzptzz5bZ2lg34DC_nOs=w128-h128-e365-rj-sc0x00ffffff" />
-        </div> 
-        `
+//         let button = `
+//         <div class="sugoi-shimeji-button">
+//             <img src="https://lh3.googleusercontent.com/UHrAPUPkpAXoP69X0hfplO6UeFLWeJcj7-F3HD3LhAlZQ0O4T8cZvtesGUoscxlCT0uB1Hefzptzz5bZ2lg34DC_nOs=w128-h128-e365-rj-sc0x00ffffff" />
+//         </div>
+//         `
 
-        button = document.createRange().createContextualFragment(button)
-        document.body.appendChild(button)
-        document.querySelector(".sugoi-shimeji-button").onclick = openImg
-    })
-}
+//         button = document.createRange().createContextualFragment(button)
+//         document.body.appendChild(button)
+//         document.querySelector(".sugoi-shimeji-button").onclick = openImg
+//     })
+// }
 
 
 

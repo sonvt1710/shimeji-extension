@@ -1,10 +1,9 @@
 import React from 'react'
 import styled from "styled-components"
-import {Link} from "react-router-dom"
-import {GoGear} from "react-icons/go"
-import {AiFillHome} from "react-icons/ai"
+import { Link } from "react-router-dom"
+import { GoGear } from "react-icons/go"
+import { AiFillHome, AiFillStar } from "react-icons/ai"
 import { useLocation } from 'react-router-dom'
-
 
 
 const NavStyle = styled.nav`
@@ -53,13 +52,17 @@ export function Nav() {
     return (
         <NavStyle>
             <Link to="/home" className={url === "/home" ? "active" : ""}>
-              <AiFillHome/>
-              Home
+                <AiFillHome />
+                Home
             </Link>
             <Link to="/settings" className={url === "/settings" ? "active" : ""}>
-               <GoGear/>
-               Settings
-            </Link>    
+                <GoGear />
+                Settings
+            </Link>
+            <Link to="/premium" className={url === "/premium" ? "active" : ""}>
+                <AiFillStar />
+                Premium
+            </Link>
         </NavStyle>
     )
 }

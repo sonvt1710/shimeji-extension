@@ -1,4 +1,5 @@
 let popupConfig = {
+  mode: "production",
   entry: './src/popup/index.js',
   output: {
     filename: 'popup/index.js'
@@ -6,7 +7,7 @@ let popupConfig = {
   module: {
     rules: [
       {
-        test: /\.(js)$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: ['babel-loader']
       }, {
@@ -16,11 +17,12 @@ let popupConfig = {
     ]
   },
   resolve: {
-    extensions: ['*', '.js']
+    extensions: ['*', '.js', '.jsx']
   }
 }
 
 let contentScriptConfig = {
+  mode: "production",
   entry: './src/index.js',
   output: {
     filename: 'index.js'
@@ -28,7 +30,7 @@ let contentScriptConfig = {
   module: {
     rules: [
       {
-        test: /\.(js)$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: ['babel-loader']
       }, {
@@ -38,7 +40,7 @@ let contentScriptConfig = {
     ]
   },
   resolve: {
-    extensions: ['*', '.js']
+    extensions: ['*', '.js', '.jsx']
   }
 }
 

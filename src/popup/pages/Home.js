@@ -150,17 +150,18 @@ function Header(props) {
     }, [props.spritesheets])
 
     function handleSpawn() {
-        mixpanel.track(`Home: Spawn: ${props.activeSprite}`)
         fireMessage("spawn", props.activeSprite)
     }
 
     function handleClear() {
+        mixpanel.track(`Home: Clear Characters`)
         fireMessage("clear")
     }
 
     function handleFavorite() {
         if (props.activeSprite === null) return
 
+        mixpanel.track(`Home: Save Favorites`)
         let localFavs = localStorage.getItem("favs")
         let favs = localFavs ? JSON.parse(localFavs) : []
         favs.unshift(props.activeSprite)
@@ -172,6 +173,7 @@ function Header(props) {
     }
 
     function handleClearFavorites() {
+        mixpanel.track(`Home: Clear Favorites`)
         localStorage.setItem("favs", "[]")
         browser.storage.sync.set({ "favs": [] })
         setFavs([])
@@ -218,7 +220,7 @@ function Header(props) {
             </section>
 
             <aside class={`bg-warning p-3 fixed-top w-100 ${showWarning ? "d-flex" : "d-none"}`}>
-                <b class="text-white">Sugoi Shimeji is not allowed to run on the current page, please try a different website.</b>
+                <b class="text-white">Sugoi Shimeji could not run on the current page. Close and open the popup again, or try a different website.</b>
             </aside>
         </HeaderStyle>
     )
@@ -228,8 +230,7 @@ function Header(props) {
 let SpritesStyle = styled.div`
     min-height:calc(50% - 22.5px);
     margin:10px 0;
-    display:flex;
-    flex-direction:column;
+    overflow: auto;
 
     .spriteBox{
         width:532px;
@@ -257,6 +258,7 @@ let SpritesStyle = styled.div`
 
     input{
         min-height:45px;
+        width: 100%;
         text-align:center;
         border-radius: 10px 0 10px 0;
         transition:.25s ease;
@@ -270,6 +272,16 @@ let SpritesStyle = styled.div`
 
 function Sprites(props) {
     let [sprites, setSprites] = useState([])
+    let [search, setSearch] = useState("")
+    const popularSprites = [
+        "adventure-time-jake", "blobs-blob-by-reitanna", "naruto-naruto-uzumaki", "five-nights-at-freddys-toy-bonnie-by-animatronic-bunny",
+        "dream-smp-bad-boy-halo-by-taro-tayo", "digimon-agumon", "adventure-time-beemo",
+        "pokemon-pikachu-by-headbutt-of-love", "apex-legends-revenant-by-the-kittle-kat", "alice-in-the-country-of-hearts-ace",
+        "dream-smp-dream-by-taro-tayo", "pusheen-pusheen-the-cat-by-crystal-clear-cc",
+        "adventure-time-lumpy-space-princess", "my-hero-academia-katsuki-bakugo-kacchan-by-superevey",
+        "apex-legends-octane-by-the-kittle-kat", "naruto-kakashi", "mario-yoshi-by-cachomon",
+        "apex-legends-pathfinder-by-the-kittle-kat", "bendy-and-the-ink-machine-bendy-by-niuniu-nuko", "adventure-time-marceline"
+    ]
 
     useEffect(() => {
         let initialSprites = []
@@ -284,6 +296,7 @@ function Sprites(props) {
     }, [props.spritesheets])
 
     function handleSearch(e) {
+        setSearch(e.target.value.trim());
         let newSpriteArray = []
         let usersSearch = e.target.value.trim().toLowerCase()
 
@@ -303,12 +316,32 @@ function Sprites(props) {
         setSprites(newSpriteArray)
     }
 
+    useEffect(() => {
+        console.log(props.spritesheets)
+    }, [props.spritesheets])
+
     return (
         <SpritesStyle className="Sprites">
             <input type="text"
                 placeholder={`Search for Character (${Object.keys(props.spritesheets).length} Total)`}
                 onChange={handleSearch} />
 
+            {!search && (<>
+                <h5>Popular Picks</h5>
+                <div className="spriteBox">
+                    {popularSprites.map((name, index) => {
+                        let i = Object.keys(props.spritesheets).length ?
+                            Object.entries(props.spritesheets).reduce((acc, v, i) => v[0] == name ? i : acc, 0) : index
+                        return (
+                            <div className="sprite @grow" onClick={() => props.setActiveSprite(name)}>
+                                <img src={`/media/sprites/sprite${i}.webp`} />
+                            </div>
+                        )
+                    })}
+                </div>
+            </>)}
+
+            <h5>All Characters</h5>
             <div className="spriteBox">
                 {sprites.filter(arr => arr[2]).map(([name, index, flag]) => {
                     return (

@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Redirect } from "react-router-dom"
+import { Home, Settings, Premium } from "./pages"
 import React, { useEffect } from 'react'
-import { Home, Settings } from "./pages"
 import mixpanel from 'mixpanel-browser'
 import ReactDOM from "react-dom"
 
@@ -17,6 +17,7 @@ function App() {
             <Route exact path="/"><Redirect to="/home" /></Route>
             <Route path="/home" component={Home} />
             <Route path="/settings" component={Settings} />
+            <Route path="/premium" component={Premium} />
         </BrowserRouter>
     )
 }

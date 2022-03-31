@@ -47,7 +47,7 @@ export function Settings() {
         setSettings(savedSettings)
         browser.storage.sync.set({ "settings": savedSettings })
 
-        mixpanel.track("Settings");
+        mixpanel.track("Settings")
     }, [])
 
     function updateSettings(name, value) {
