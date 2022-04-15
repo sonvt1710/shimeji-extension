@@ -1,0 +1,99 @@
+@font-face {
+  font-family: 'Comfortaa';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/comfortaa/v37/1Pt_g8LJRfWJmhDAuUsSQamb1W0lwk4S4WjMPrQ.ttf) format('truetype');
+}
+:root {
+  --blue: #238bdc;
+  --light-blue: #cbebf6;
+  --red: #ea5469;
+  --yellow: #ffde25;
+  --green: #23dc7c;
+  --cream: #fef7ee;
+  --black: #444;
+  --radius: 10px;
+}
+* {
+  font-family: 'Comfortaa', cursive;
+  font-size: 14px;
+}
+.p-home {
+  background-color: var(--cream);
+}
+.p-home__title {
+  font-size: 44px;
+  text-align: center;
+}
+.p-home__purchase-section {
+  background: linear-gradient(45deg, #c0f0dd, #c6daea);
+  border-radius: var(--radius);
+  display: flex;
+  justify-content: space-around;
+  max-width: 800px;
+  margin: auto;
+  padding: 40px 44px;
+}
+.p-home__purchase-item {
+  align-items: center;
+  text-align: center;
+  background: var(--cream);
+  border: 4px solid var(--blue);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  width: 300px;
+}
+.p-home__purchase-item.--pro {
+  border: 4px solid var(--yellow);
+}
+.p-home__purchase-item-header {
+  background: var(--blue);
+  box-sizing: border-box;
+  text-align: center;
+  margin: 0;
+  min-width: 100%;
+  padding: 12px;
+  font-size: 24px;
+}
+.p-home__purchase-item-header.--pro {
+  background: var(--yellow);
+}
+.c-button {
+  background: var(--cream);
+  border: 2px solid var(--blue);
+  border-radius: 10px;
+  color: var(--blue);
+  cursor: pointer;
+  height: 45px;
+  margin-bottom: 8px;
+  min-width: 80px;
+  padding: 0 40px;
+  transition: 0.25s ease;
+}
+.c-button:hover {
+  color: white;
+  background: var(--blue);
+  border: 2px solid white;
+}
+.c-button.--danger {
+  border: 2px solid var(--red);
+  color: var(--red);
+}
+.c-button.--danger:hover {
+  background: var(--red);
+  color: white;
+  border: 2px solid white;
+}
+.c-link {
+  color: var(--blue);
+}
+.c-flair {
+  color: var(--yellow);
+  font-size: inherit;
+}
+.c-flair.--success {
+  color: var(--green);
+}

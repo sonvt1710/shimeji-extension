@@ -1,3 +1,4 @@
+import mixpanel from "mixpanel-browser"
 import { browser } from "./browser"
 import spritesheets from "./spritesheets"
 
@@ -375,7 +376,6 @@ let shimeji = (function () {
                     bud.y = 0
                     bud.velocity[1] *= -1
                 }
-
             }
         },
         clear: function () {
@@ -400,7 +400,8 @@ let shimeji = (function () {
         settings: {
             autoSpawn: true,
             grow: false,
-            multiply: false
+            multiply: false,
+            steal: true
         },
         favs: ["my-hero-academia-katsuki-bakugo-kacchan-by-superevey"],
         setup: async function () {
@@ -423,104 +424,38 @@ browser.storage.sync.get(["settings", "favs"], function (items) {
         shimeji.settings = items.settings
     if (items["favs"])
         shimeji.favs = items.favs
-    // if (!items["clickedHelperButton"])
-    //     showButton()
 
     shimeji.setup()
 });
 
 
 browser.runtime.onMessage.addListener((req, sender, reply) => {
-    switch (req.type) {
-        case "spawn":
-            shimeji.spawn(req.payload)
-            break
-        case "clear":
-            shimeji.clear()
-            break
-        case "ping":
-            reply("im awake")
-            break
-        case "refresh settings":
-            browser.storage.sync.get(["settings"], function (obj) {
-                shimeji.settings = obj.settings
-            })
-            break
+    if (req.type == "spawn") shimeji.spawn(req.payload)
+    if (req.type == "clear") shimeji.clear()
+    if (req.type == "ping") reply("im awake")
+    if (req.type == "refresh settings") {
+        browser.storage.sync.get(["settings"], function (obj) {
+            shimeji.settings = obj.settings
+        })
+    }
+    if (req.type == "spawn favorites") {
+        for (let character of shimeji.favs) {
+            shimeji.spawn(character)
+        }
     }
 
     return true
 })
 
 
-// function showButton() {
-
-//     window.addEventListener('load', (event) => {
-
-//         function openImg() {
-//             let anchor = document.createElement("a")
-//             anchor.href = "https://miro.medium.com/max/1000/0*7ftPt1OUoJMOqjXN"
-//             anchor.target = "_blank"
-//             anchor.click()
-//             anchor.remove()
-
-//             browser.storage.sync.set({ clickedHelperButton: true })
-//         }
-
-//         let style =  `
-//         <style>
-//             .sugoi-shimeji-button{
-//                 position:fixed;
-//                 top:50px;
-//                 right:50px;
-//                 height:75px;
-//                 width:75px;
-//                 background:#fff;
-//                 border-radius:50%;
-//                 box-shadow: 2px 2px 7px 0px #a2a2a2;
-//                 z-index:10000;
-//                 animation:pulse 1s linear 0s infinite alternate;
-//                 display:flex;
-//                 align-items:center;
-//                 justify-content:center;
-//                 cursor:pointer;
-//             }
-
-//             .sugoi-shimeji-button img{
-//                 height:70%;
-//                 width:auto;
-//             }
-
-//             @keyframes pulse{
-//                 from{
-//                     transform:scale(1);
-//                 }
-//                 33%{
-//                     transform:scale(1.3);
-//                 }
-//                 66%{
-//                     tranform:scale(.8);
-//                 }
-//                 100%{
-//                     transform:scale(1);
-//                 }
-//             }
-//         </style>
-//         `
-
-//         style = document.createRange().createContextualFragment(style)
-//         document.head.appendChild(style)
-
-//         let button = `
-//         <div class="sugoi-shimeji-button">
-//             <img src="https://lh3.googleusercontent.com/UHrAPUPkpAXoP69X0hfplO6UeFLWeJcj7-F3HD3LhAlZQ0O4T8cZvtesGUoscxlCT0uB1Hefzptzz5bZ2lg34DC_nOs=w128-h128-e365-rj-sc0x00ffffff" />
-//         </div>
-//         `
-
-//         button = document.createRange().createContextualFragment(button)
-//         document.body.appendChild(button)
-//         document.querySelector(".sugoi-shimeji-button").onclick = openImg
-//     })
-// }
+function ContextMenu() {
+    return (
+        <section>
+            <button>Remove</button>
+            <button>Remote Control</button>
+        </section>
+    )
+}
 
 
 

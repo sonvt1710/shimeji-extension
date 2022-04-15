@@ -37,7 +37,8 @@ export function Settings() {
             let defaultSettings = {
                 multiply: false,
                 grow: false,
-                autoSpawn: true
+                autoSpawn: true,
+                steal: true
             }
             localStorage.setItem("settings", JSON.stringify(defaultSettings))
             browser.storage.sync.set({ "settings": defaultSettings })
@@ -104,6 +105,19 @@ export function Settings() {
                         onstyle="primary"
                         onChange={(checked) => {
                             updateSettings("autoSpawn", checked)
+                        }}
+                    />
+                </div>
+
+                <div>
+                    Allow characters to steal images and other items 
+                    <BootstrapSwitchButton
+                        checked={!!settings["steal"]}
+                        onlabel='On'
+                        offlabel='Off'
+                        onstyle="primary"
+                        onChange={(checked) => {
+                            updateSettings("steal", checked)
                         }}
                     />
                 </div>

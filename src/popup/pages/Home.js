@@ -149,6 +149,10 @@ function Header(props) {
         browser.storage.sync.set({ "favs": localFavs })
     }, [props.spritesheets])
 
+    function handleSpawnFavorites(){
+        fireMessage("spawn favorites")
+    }
+
     function handleSpawn() {
         fireMessage("spawn", props.activeSprite)
     }
@@ -199,9 +203,9 @@ function Header(props) {
     return (
         <HeaderStyle>
             <section className="settings">
-                <h1>Actions</h1>
+                {/* <h1>Actions</h1> */}
                 <button onClick={handleFavorite}>Save in Favorites</button>
-                <div className="break"></div>
+                <button onClick={handleSpawnFavorites}>Spawn All Favorites</button>  
                 <button onClick={handleClearFavorites} className="red">Clear Favorites</button>
                 <button onClick={handleClear} className="red">Clear Active Characters</button>
             </section>
@@ -213,7 +217,7 @@ function Header(props) {
             </section>
 
             <section className="favs">
-                <h1>Favorites</h1>
+                {/* <h1>Favorites</h1> */}
                 <div className="favsBox">
                     {favBoxes}
                 </div>
@@ -242,7 +246,7 @@ let SpritesStyle = styled.div`
 
     .sprite{
         height:80px;
-        width:42.5px;
+        width:45px;
         margin:4px;
         overflow:hidden;
         display:flex;
@@ -258,7 +262,7 @@ let SpritesStyle = styled.div`
 
     input{
         min-height:45px;
-        width: 100%;
+        width:100%;
         text-align:center;
         border-radius: 10px 0 10px 0;
         transition:.25s ease;
@@ -315,10 +319,6 @@ function Sprites(props) {
 
         setSprites(newSpriteArray)
     }
-
-    useEffect(() => {
-        console.log(props.spritesheets)
-    }, [props.spritesheets])
 
     return (
         <SpritesStyle className="Sprites">
