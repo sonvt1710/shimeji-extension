@@ -1,6 +1,9 @@
-import mixpanel from "mixpanel-browser"
+import React from "react"
+import * as ReactDOM from 'react-dom'
+import styled from 'styled-components';
 import { browser } from "./browser"
 import spritesheets from "./spritesheets"
+
 
 let shimeji = (function () {
     return {
@@ -55,6 +58,11 @@ let shimeji = (function () {
             })
         },
         attatchEvents: function (bud) {
+            bud.canvas.addEventListener("contextmenu", (e) => {
+                e.preventDefault();
+                ReactDOM.render(<ContextMenu x={bud.x} y={bud.y} />, document.querySelector("#sugoi-shimeji"))
+                return false;
+            })
             bud.canvas.addEventListener("mousedown", (e) => {
                 this.setAction(bud, "dragging")
             })
@@ -413,6 +421,11 @@ let shimeji = (function () {
                 }
             }
 
+            let div = document.createElement("div")
+            div.id = "sugoi-shimeji"
+            div.style.zIndex = 9999
+            document.body.appendChild(div)
+
             this.renderLoop()
         }
     }
@@ -448,12 +461,20 @@ browser.runtime.onMessage.addListener((req, sender, reply) => {
 })
 
 
-function ContextMenu() {
+const StyledContextMenu = styled.section`
+    backgorund: white;
+    position: fixed;
+    left: ${p => p.x}px;
+    top: ${p => p.y}px;
+    border: 4px solid #f00;
+`
+
+function ContextMenu(props) {
     return (
-        <section>
+        <StyledContextMenu {...props}>
             <button>Remove</button>
             <button>Remote Control</button>
-        </section>
+        </StyledContextMenu>
     )
 }
 
